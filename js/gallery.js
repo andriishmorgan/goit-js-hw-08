@@ -81,12 +81,19 @@ gallery.innerHTML = galleryMarcup;
 
 gallery.addEventListener('click', (event) => {
   event.preventDefault();
+
+  const clickedImage = event.target;
+  if (!clickedImage.classList.contains('gallery-image')) {
+    return;
+  }
   
-  const clickedImegSrc = event.target.dataset.source;
-  if (clickedImegSrc) {
+  const clickedImageSrc = clickedImage.dataset.source;
+  const clickedImageAlt = clickedImage.alt;
+  if (clickedImageSrc) {
     const myModal = basicLightbox.create(`
     <img 
-    src="${clickedImegSrc}"
+    src="${clickedImageSrc}"
+    alt="${clickedImageAlt}"
     width="1112"
     height="640"
     />`,
@@ -94,7 +101,7 @@ gallery.addEventListener('click', (event) => {
         onShow: (myModal) => {
           document.addEventListener("keydown", onEscPress);
         },
-        onclose: (myModal) => {
+        onClose: (myModal) => {
           document.removeEventListener("keydown", onEscPress);
         }
       }
@@ -102,7 +109,7 @@ gallery.addEventListener('click', (event) => {
     myModal.show();
 
     function onEscPress(event) {
-      if (event.key === "Escape") {
+      if (event.code === "Escape") {
         myModal.close();
       }
     }
